@@ -1,0 +1,123 @@
+"/Users/benjaminlee/PycharmProjects/LiveASD venv/.venv/bin/python" /Users/benjaminlee/PycharmProjects/LiveASD venv/facial_recognition_test.py --image_path demo/0003/pyframes/000064.jpg --output_path face_flagged.jpeg
+--- Face Detection Test ---
+Input image: demo/0003/pyframes/000064.jpg
+Output image: face_flagged.jpeg
+Device: cpu
+Confidence threshold: 0.8
+Image scale for detector: 1.0
+
+Loading S3FD model on cpu...
+DEBUG_S3FD_INIT: Initializing S3FD on device: cpu
+DEBUG_S3FDNET_INIT: Initializing S3FDNet on device: cpu
+DEBUG_DETECT_INIT: Initialized Detect with conf_thresh=0.05, nms_thresh=0.3
+DEBUG_S3FD_INIT: S3FDNet model moved to device: cpu
+DEBUG_S3FD_INIT: Loading weights from: /Users/benjaminlee/PycharmProjects/LiveASD venv/model/faceDetector/s3fd/sfd_face.pth
+DEBUG_S3FD_INIT: S3FD model weights loaded and set to eval mode.
+S3FD model loaded successfully.
+
+Loading image from demo/0003/pyframes/000064.jpg...
+Original image dimensions: 1280x720
+
+Detecting faces...
+DEBUG_DETECT_FACES: Called with image shape (720, 1280, 3), conf_th 0.8, scales [1.0], device cpu
+DEBUG_DETECT_FACES: Processing scale 1/1: 1.0
+DEBUG_DETECT_FACES: Scaled image shape: (720, 1280, 3)
+DEBUG_DETECT_FACES: Input tensor x created. Shape: torch.Size([1, 3, 720, 1280]), Device: cpu
+DEBUG_S3FDNET_FORWARD: Input x. Shape: torch.Size([1, 3, 720, 1280]), Device: cpu, Current Net Device: cpu
+DEBUG_S3FDNET_FORWARD: sources[0] (after L2Norm3_3). Shape: torch.Size([1, 256, 180, 320]), Device: cpu. Sample (first 5 vals): [0.         0.23111442 0.         0.         0.        ]
+DEBUG_S3FDNET_FORWARD: loc_x_head from sources[0]. Shape: torch.Size([1, 4, 180, 320]), Device: cpu. Sample: [ 0.70882416  0.47341692  0.12905963 -0.2797949  -0.6081755 ]
+DEBUG_S3FDNET_FORWARD: conf_x_head from sources[0]. Shape: torch.Size([1, 4, 180, 320]), Device: cpu. Sample: [0.644545   1.1518809  1.1199673  0.8541323  0.78119874]
+DEBUG_S3FDNET_FORWARD: loc_cat (concatenated loc predictions). Shape: torch.Size([1, 307040]), Device: cpu. Sample: [ 0.70882416  1.1344368  -0.30087635  0.07383807  0.47341692]
+DEBUG_S3FDNET_FORWARD: conf_cat (concatenated conf predictions). Shape: torch.Size([1, 153520]), Device: cpu. Sample: [ 0.94442314 -2.21407     1.1518809  -2.1916845   1.1199673 ]
+DEBUG_PRIORBOX_INIT: input_size (H,W)=(720,1280)
+DEBUG_PRIORBOX_FORWARD: Generated 76760 priors. Device: cpu. Sample (first 20 vals): [0.0015625  0.00277778 0.0125     0.02222222 0.0046875  0.00277778
+ 0.0125     0.02222222 0.0078125  0.00277778 0.0125     0.02222222
+ 0.0109375  0.00277778 0.0125     0.02222222 0.0140625  0.00277778
+ 0.0125     0.02222222]
+DEBUG_S3FDNET_FORWARD: Priors (priors_cpu). Shape: torch.Size([76760, 4]), Device: cpu. Sample: [0.0015625  0.00277778 0.0125     0.02222222 0.0046875  0.00277778
+ 0.0125     0.02222222 0.0078125  0.00277778 0.0125     0.02222222
+ 0.0109375  0.00277778 0.0125     0.02222222 0.0140625  0.00277778
+ 0.0125     0.02222222]
+DEBUG_S3FDNET_FORWARD: Priors (priors_on_device after .to(self.device)). Shape: torch.Size([76760, 4]), Device: cpu.
+DEBUG_DETECT_FORWARD: Inputs devices: loc=cpu, conf=cpu, prior=cpu. Target device: cpu
+  Input loc_data shape: torch.Size([1, 76760, 4]), sample: [ 0.70882416  1.1344368  -0.30087635  0.07383807  0.47341692]
+  Input conf_data shape: torch.Size([1, 76760, 2]), sample: [0.95924205 0.04075792 0.96589345 0.0341065  0.96597034]
+  Input prior_data shape: torch.Size([76760, 4]), sample: [0.0015625  0.00277778 0.0125     0.02222222 0.0046875 ]
+DEBUG_DECODE: Input loc. Shape: torch.Size([76760, 4]), Device: cpu. Sample: [ 0.70882416  1.1344368  -0.30087635  0.07383807  0.47341692  2.3317251
+  0.19683047  0.32966402  0.12905963  2.2263353   0.87667197  0.6930083
+ -0.2797949   2.0859425   1.1931492   0.8143182  -0.6081755   2.0759768
+  1.2219596   0.8635315 ]
+DEBUG_DECODE: Input priors. Shape: torch.Size([76760, 4]), Device: cpu. Sample: [0.0015625  0.00277778 0.0125     0.02222222 0.0046875  0.00277778
+ 0.0125     0.02222222 0.0078125  0.00277778 0.0125     0.02222222
+ 0.0109375  0.00277778 0.0125     0.02222222 0.0140625  0.00277778
+ 0.0125     0.02222222]
+DEBUG_DECODE: Variances: [0.1, 0.2]
+DEBUG_DECODE: Output boxes (x1,y1,x2,y2). Sample: [-0.00343647 -0.00597767  0.00833353  0.01657516 -0.00122167 -0.003909
+  0.01178022  0.01982778  0.00052605 -0.00503777  0.0154216   0.02048815
+  0.00265333 -0.0056632   0.01852218  0.02048961  0.005322   -0.00581468
+  0.02128256  0.0205968 ]
+DEBUG_DETECT_FORWARD: Decoded boxes. Shape: torch.Size([1, 76760, 4]), Device: cpu. Sample: [ 0.56133413 -0.00665456  0.57279277  0.01907244]
+DEBUG_DETECT_FORWARD: Created output tensor. Shape: torch.Size([1, 2, 750, 5]), Device: cpu
+    DEBUG_SAMPLE: boxes_current_batch first 5 rows:
+[ 0.56133413 -0.00665456  0.57279277  0.01907244]
+    DEBUG_MASK B0 C1: c_mask.shape = torch.Size([76760]), num_true = 531/76760
+    DEBUG_MASK B0 C1: c_mask 181 = False
+  DEBUG_DETECT_LOOP B0 C1: Found 531 scores > conf_thresh (0.05)
+    DEBUG_MASK B0 C1: l_mask.shape = torch.Size([76760, 4]), num_true = 2124/307040
+    DEBUG_MASK B0 C1: l_mask flattened 181 = True
+    DEBUG_SHAPES: boxes_current_batch[l_mask] gives a 1D tensor of length 2124
+    DEBUG_SHAPES: flat_filtered.shape = torch.Size([2124])
+    Filtered boxes shape: torch.Size([531, 4]). Filtered scores shape: torch.Size([531])
+    Sample filtered box: [ 0.13580333 -0.00696978  0.1501973   0.02318449], score: 0.0510
+    NMS results: count_kept=108, ids_kept sample (up to 5): [498 281 437 530 507]
+    Final gathered scores for output (torch.Size([108, 1])): [0.9999896  0.25188246 0.23717146 0.12707159 0.12391237 0.11334959
+ 0.10530857 0.10521197 0.09727386 0.09692941 0.09502317 0.085959
+ 0.07626676 0.07412446 0.0685728  0.06801533 0.06629608 0.0657068
+ 0.06487561 0.06442738 0.06315088 0.06231677 0.06217887 0.06204936
+ 0.06163292 0.0614613  0.06113625 0.06049437 0.0604518  0.05987171
+ 0.05979054 0.05838019 0.05813619 0.05811108 0.05807539 0.05805122
+ 0.05798297 0.05788927 0.05735023 0.05727179 0.05719801 0.05697717
+ 0.05638968 0.05624128 0.05622473 0.05621457 0.05581661 0.055765
+ 0.05562329 0.05542483 0.05535814 0.05535103 0.05511872 0.05500219
+ 0.05482817 0.05453036 0.0540643  0.05392708 0.05376369 0.05359708
+ 0.05341521 0.05310881 0.05309882 0.05293328 0.05291656 0.05280099
+ 0.05278426 0.05263504 0.0523779  0.05235767 0.05223735 0.05195571
+ 0.05186176 0.05184626 0.05173038 0.05169429 0.05148309 0.05138487
+ 0.05133074 0.05128179 0.05127411 0.05110418 0.05109878 0.05098542
+ 0.05096911 0.05090028 0.05081061 0.05073223 0.05072151 0.05064064
+ 0.05051643 0.05046747 0.05044362 0.05042603 0.05041327 0.05040985
+ 0.05039681 0.0503451  0.05027239 0.05020959 0.05020288 0.0501961
+ 0.05018825 0.05011789 0.05010318 0.05009615 0.05004199 0.05002024]
+    Final gathered boxes for output (torch.Size([108, 4])): [0.46636385 0.3698658  0.5678778  0.63488054 0.13260715 0.5259852
+ 0.14500438 0.55127096 0.23405011 0.11683796 0.2552536  0.16287255
+ 0.7788256  0.57900226 1.1065497  1.2481835  0.8497249  0.07831633
+ 0.99793375 0.46684802]
+DEBUG_DETECT_FORWARD: Returning output from Detect.forward. Shape torch.Size([1, 2, 750, 5]). Sample (first detection if any):
+  [0.9999896  0.46636385 0.3698658  0.5678778  0.63488054]
+DEBUG_S3FDNET_FORWARD: Output from self.detect.forward. Shape: torch.Size([1, 2, 750, 5]), Device: cpu. Sample (first det if any):
+  [[0.         0.         0.         0.         0.        ]
+ [0.9999896  0.46636385 0.3698658  0.5678778  0.63488054]]
+DEBUG_DETECT_FACES: Raw model output y. Shape: torch.Size([1, 2, 750, 5]), Device: cpu
+DEBUG_DETECT_FACES: Detections tensor. Shape: torch.Size([1, 2, 750, 5]), Device: cpu
+DEBUG_DETECT_FACES: Scale tensor created. Values: [1280.  720. 1280.  720.], Device: cpu
+  DEBUG_DET_LOOP: Found potential det 0 for class 1. Score: 1.0000, Device: cpu
+    Raw Norm Coords (MPS): [0.46636385 0.3698658  0.5678778  0.63488054], Device: cpu
+    Scaled Coords (pt_on_device, MPS): [596.94574 266.30338 726.8836  457.11398], Device: cpu
+    Scaled Coords (pt, CPU NumPy): [596.94574 266.30338 726.8836  457.11398]
+    Final BBox for vstack: (np.float32(596.94574), np.float32(266.30338), np.float32(726.8836), np.float32(457.11398), 0.9999896287918091)
+DEBUG_DETECT_FACES: Found 1 detections above conf_th for this scale before NMS.
+DEBUG_DETECT_FACES: Total bboxes before NMS: 1
+DEBUG_DETECT_FACES: NMS keep indices: [0]
+DEBUG_DETECT_FACES: Final bboxes after NMS for this scale: 1
+DEBUG_DETECT_FACES: Returning 1 final bboxes from detect_faces.
+DEBUG_TEST_SCRIPT: Raw bboxes from detect_faces (type: <class 'numpy.ndarray'>):
+[[596.94573975 266.30337524 726.88360596 457.11398315   0.99998963]]
+Detected 1 faces.
+  Face 1: BBox=(596,266)-(726,457), Score=1.0000
+
+Saving output image with detections to face_flagged.jpeg...
+Successfully saved output to face_flagged.jpeg
+
+--- Test Complete ---
+
+Process finished with exit code 0
