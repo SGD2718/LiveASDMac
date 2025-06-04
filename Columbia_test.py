@@ -27,7 +27,7 @@ parser = argparse.ArgumentParser(description="Columbia ASD Evaluation")
 
 parser.add_argument('--videoName', type=str, default="col", help='Demo video name')
 parser.add_argument('--videoFolder', type=str, default="colDataPath", help='Path for inputs, tmps and outputs')
-parser.add_argument('--pretrainModel', type=str, default="weight/pretrain_AVA_CVPR.model",
+parser.add_argument('--pretrainModel', type=str, default="weight/pretrain_AVA_CVPR.pt",
                     help='Path for the pretrained model')
 
 parser.add_argument('--nDataLoaderThread', type=int, default=10, help='Number of workers')
@@ -700,3 +700,69 @@ def main():
 
 if __name__ == '__main__':
     main()
+    x = 0/0
+    model_wrapper = ASD()
+    model_wrapper.loadParameters("weight/pretrain_AVA_CVPR.pt")
+    model = model_wrapper.model
+    #model.load_state_dict(torch.load('weight/pretrain_AVA_CVPR.pt'))
+    model_wrapper.eval()
+
+    duration = 5
+    audio_input = torch.randn(1, duration * 100, 13).to(torch.device('mps'))
+    visual_input = torch.randn(1, duration * 25, 112, 112).to(torch.device('mps'))
+
+    # Trace the entire submodule with named inputs
+    traced_audio = torch.jit.trace(
+        model_wrapper.model,
+        {'forward_audio_frontend': audio_input}
+    )
+
+    traced_visual = torch.jit.trace(
+        model_wrapper.model,
+        {'forward_visual_frontend': visual_input}
+    )
+
+    # Trace backend (joint AV)
+    with torch.no_grad():
+        embedA = model_wrapper.model.forward_audio_frontend(audio_input)
+        embedV = model_wrapper.model.forward_visual_frontend(visual_input)
+
+    traced_backend = torch.jit.trace(
+        model_wrapper.model,
+        {'forward_audio_visual_backend': (embedA, embedV)}
+    )
+
+    # ---- Convert to Core ML ----
+    import coremltools as ct
+
+    print("Converting audio frontend...")
+    mlmodel_audio = ct.convert(
+        traced_audio,
+        inputs=[ct.TensorType(name="audio_input", shape=audio_input.shape)],
+        compute_units=ct.ComputeUnit.ALL
+    )
+    mlmodel_audio.save("coreml_models/audio_frontend.mlmodel")
+
+    print("Converting visual frontend...")
+    mlmodel_visual = ct.convert(
+        traced_visual,
+        inputs=[ct.TensorType(name="video_input", shape=visual_input.shape)],
+        compute_units=ct.ComputeUnit.ALL
+    )
+    mlmodel_visual.save("coreml_models/visual_frontend.mlmodel")
+
+    print("Converting audio-visual backend...")
+    mlmodel_backend = ct.convert(
+        traced_backend,
+        inputs=[
+            ct.TensorType(name="audio_embedding", shape=embedA.shape),
+            ct.TensorType(name="visual_embedding", shape=embedV.shape)
+        ],
+        compute_units=ct.ComputeUnit.ALL
+    )
+    mlmodel_backend.save("coreml_models/audio_visual_backend.mlmodel")
+
+    print("✅ Done. Saved as:")
+    print(" - audio_frontend.mlmodel")
+    print(" - visual_frontend.mlmodel")
+    print(" - audio_visual_backend.mlmodel")

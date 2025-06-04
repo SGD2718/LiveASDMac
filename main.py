@@ -261,8 +261,8 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Live Active Speaker Detection on M2 Mac")
-    parser.add_argument('--model_path', type=str, default="weight/pretrain_AVA_CVPR.model",
-                        help='Path to the pretrained ASD model weights (e.g., pretrain_AVA_CVPR.model or finetuning_TalkSet.model from the repo)')
+    parser.add_argument('--model_path', type=str, default="weight/pretrain_AVA_CVPR.pt",
+                        help='Path to the pretrained ASD model weights (e.g., pretrain_AVA_CVPR.pt or finetuning_TalkSet.pt from the repo)')
     parser.add_argument('--camera_id', type=int, default=0, help='Camera ID for OpenCV VideoCapture')
 
     cli_args = parser.parse_args()

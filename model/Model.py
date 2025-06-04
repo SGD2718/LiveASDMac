@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 
 from model.Classifier import BGRU
-from model.EncoderFix import visual_encoder, audio_encoder
+from model.Encoder import visual_encoder, audio_encoder
+
 
 class ASD_Model(nn.Module):
     def __init__(self):

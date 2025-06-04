@@ -1,3 +1,4 @@
+import coremltools
 import cv2
 import numpy as np
 import argparse
@@ -5,6 +6,7 @@ import os
 os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '0'
 import sys
 import torch  # To check for MPS availability
+import torchvision
 
 # Ensure the model directory is in the Python path if the script is run from outside
 # For example, if this script is in Light-ASD-main/
@@ -117,11 +119,11 @@ if __name__ == "__main__":
                         help='Path to the input image file.')
     parser.add_argument('--output_path', type=str, default='detected_faces_output.jpg',
                         help='Path to save the output image with detected faces.')
-    parser.add_argument('--device', type=str, default='mps', choices=['cpu', 'mps'],
+    parser.add_argument('--device', type=str, default='cpu', choices=['cpu', 'mps'],
                         help='Device to run the model on (e.g., \"cpu\", \"mps\"). Default is \"cpu\".')
     parser.add_argument('--conf_th', type=float, default=0.8,
                           help='Confidence threshold for face detections (0.0 to 1.0). Default is 0.8.')
-    parser.add_argument('--scale', type=float, default=1.0,
+    parser.add_argument('--scale', type=float, default=0.5,
                         help='Factor by which to scale the image before detection (e.g., 1.0 for original size, 0.5 for half size). The S3FD model in Columbia_test.py uses 0.25. Default is 1.0.')
 
     args = parser.parse_args()
@@ -131,3 +133,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     test_face_detection(args.image_path, args.output_path, args.device, args.conf_th, args.scale)
+
+
